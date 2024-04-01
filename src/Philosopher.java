@@ -12,7 +12,7 @@ public class Philosopher extends Thread {
         this.latch = latch;
     }
 
-    private void lockForks() throws InterruptedException {
+    private void lock() throws InterruptedException {
         if (id % 2 == 0) {
             forks[id].acquire();
             forks[(id + 1) % 5].acquire();
@@ -25,7 +25,7 @@ public class Philosopher extends Thread {
         System.out.println("P: " + id + " took right");
     }
 
-    private void unlockForks() {
+    private void unlock() {
         forks[id].release();
         forks[(id + 1) % 5].release();
         System.out.println("P: " + id + " put left");
@@ -38,7 +38,7 @@ public class Philosopher extends Thread {
             System.out.println("P: " + id + " is thinking");
 
             try {
-                lockForks();
+                lock();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -50,7 +50,7 @@ public class Philosopher extends Thread {
                 e.printStackTrace();
             }
 
-            unlockForks();
+            unlock();
         }
 
         latch.countDown();
