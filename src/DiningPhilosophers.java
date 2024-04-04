@@ -15,9 +15,7 @@ public class DiningPhilosophers {
             philosophers[i] = new Philosopher(i, forks, latch);
             philosophers[i].start();
         }
-
         latch.await();
-
         System.out.println("success");
     }
 }

@@ -16,25 +16,25 @@ public class Philosopher extends Thread {
         if (id % 2 == 0) {
             forks[id].acquire();
             forks[(id + 1) % 5].acquire();
+            System.out.println("P: " + id + " took right");
+            System.out.println("P: " + id + " took left");
         } else {
             forks[(id + 1) % 5].acquire();
             forks[id].acquire();
+            System.out.println("P: " + id + " took left");
+            System.out.println("P: " + id + " took right");
         }
-
-        System.out.println("P: " + id + " took left");
-        System.out.println("P: " + id + " took right");
     }
 
     private void unlock() {
         forks[id].release();
         forks[(id + 1) % 5].release();
-        System.out.println("P: " + id + " put left");
         System.out.println("P: " + id + " put right");
+        System.out.println("P: " + id + " put left");
     }
 
     @Override
     public void run() {
-        for (int i = 0; i < 2; i++) {
             System.out.println("P: " + id + " is thinking");
 
             try {
@@ -45,13 +45,12 @@ public class Philosopher extends Thread {
 
             System.out.println("P: " + id + " is eating");
             try {
-                Thread.sleep(200);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
+        unlock();
 
-            unlock();
-        }
 
         latch.countDown();
     }
